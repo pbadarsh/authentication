@@ -28,9 +28,9 @@
     "@types/http-errors": "^1.6.3",
     "@types/mongoose": "^5.5.34",
     "@types/morgan": "^1.7.37",
-    "@types/node": "^12.12.17",
-    "nodemon": "^2.0.1",
+    "@types/node": "^12.12.22",
+    "nodemon": "^2.0.2",
     "prettier": "^1.19.1",
-    "typescript": "^3.7.2"
+    "typescript": "^3.7.4"
   }
 }
