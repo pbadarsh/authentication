@@ -2,6 +2,10 @@ import { Router } from "express";
 import { AuthService } from "./auth.service";
 
 export const authRouter = Router();
-const { login } = new AuthService();
+const { login, register } = new AuthService();
 
-authRouter.route("/login").get(login);
+authRouter.post("/login", login);
+
+authRouter.post("/register", register);
+
+// authRouter.post("/forgetPassword", login)

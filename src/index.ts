@@ -1,24 +1,34 @@
 import { config } from "dotenv";
 config();
-import {
-  Query,
-  expressErrorHandler,
-  attachFinishMethod,
-  ExpressResponse
-} from "express-methods";
+
+import { expressErrorHandler, attachFinishMethod } from "express-methods";
+
 import express from "express";
+
 const { log } = console;
 const { PORT, MONGODB_URL } = process.env;
 const app = express();
+
 import { appRoutes } from "./index.route";
 import morgan from "morgan";
+import { connect } from "mongoose";
 
-app.listen(PORT, () => log("server on : ", PORT));
+connect(MONGODB_URL, {
+  useUnifiedTopology: true,
+  useNewUrlParser: true,
+  useFindAndModify: true
+})
+  .then(() => {
+    console.log("Database connected");
 
-app.use(attachFinishMethod);
+    app.listen(PORT, () => log("server on : ", PORT));
 
-app.use(morgan("combined"));
+    app.use(attachFinishMethod);
 
-appRoutes(app);
+    app.use(morgan("combined"));
 
-app.use(expressErrorHandler);
+    appRoutes(app);
+
+    app.use(expressErrorHandler);
+  })
+  .catch(log);

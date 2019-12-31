@@ -1,4 +1,4 @@
-import { createSchema, Type, typedModel } from "ts-mongoose";
+import { createSchema, Type, typedModel, ExtractProps } from "ts-mongoose";
 
 const collection = "auth-users";
 
@@ -8,3 +8,5 @@ const authSchema = createSchema({
 });
 
 export const authModel = typedModel(collection, authSchema);
+
+export type AuthProps = ExtractProps<typeof authSchema>;
