@@ -9,6 +9,7 @@ const authSchema = createSchema({
 
 const loggedInDeviceSchema = createSchema({
   userId: Type.objectId({ required: true }),
+  token: Type.string({ required: true }),
 
   isMobile: Type.boolean(),
   isDesktop: Type.boolean(),
@@ -17,6 +18,7 @@ const loggedInDeviceSchema = createSchema({
   os: Type.string(),
   platform: Type.string(),
   source: Type.string()
+
 
 }, { timestamps: true });
 

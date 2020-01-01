@@ -1,7 +1,7 @@
 import { hash, compare } from "bcrypt";
 import jwt from "jsonwebtoken";
 
-const { SALT_ROUNDS, PRIVATE_KEY, ALGORITHM } = process.env;
+const { SALT_ROUNDS, PRIVATE_KEY, ALGORITHM, EXPIRES_IN } = process.env;
 
 export const hashPassword = async (password: string) => {
   return await hash(password, +SALT_ROUNDS);
@@ -17,7 +17,7 @@ export const comparePassword = async (
 export const createJwt = async (data: object) => {
   return await jwt.sign(
     {
-      expiresIn: "1h",
+      expiresIn: EXPIRES_IN,
       ...data
     },
     PRIVATE_KEY,

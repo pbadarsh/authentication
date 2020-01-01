@@ -9,7 +9,6 @@ export class AuthRepository {
     }
 }
 
-
 export class LoggedInRepository {
     async findAll({ userId }): Promise<LoggedInProps[]> {
         return await loggedInModel.find({ userId });

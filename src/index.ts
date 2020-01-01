@@ -13,6 +13,7 @@ import { appRoutes } from "./index.route";
 import morgan from "morgan";
 import { connect } from "mongoose";
 import { json } from 'body-parser'
+import helmet from 'helmet'
 
 connect(MONGODB_URL, {
   useUnifiedTopology: true,
@@ -20,14 +21,15 @@ connect(MONGODB_URL, {
   useFindAndModify: true
 })
   .then(() => {
-    console.log("Database connected");
+    console.log("Mongodb connected");
 
-    app.listen(PORT, () => log("server on : ", PORT));
+    app.listen(PORT, () => log("Server up on : ", PORT));
 
     app.use(attachFinishMethod);
+    
+    app.use(helmet())
     app.use(json())
     app.use(useragent.express())
-
     app.use(morgan("combined"));
 
     appRoutes(app);

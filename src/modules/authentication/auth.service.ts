@@ -1,7 +1,7 @@
 import { ExpressResponse, ExpressError } from "express-methods";
 import { authModel, loggedInModel } from "./auth.model";
 import { hashPassword, createJwt, validateJwt, comparePassword } from "../../common/common.util";
-import { AuthDTO } from "./auth.dto";
+import { AuthDTO, userIdDTO } from "./auth.dto";
 import { Request } from "express";
 import { BadRequest } from "http-errors";
 import { AuthRepository, LoggedInRepository } from "./auth.repository";
@@ -22,13 +22,15 @@ export class AuthService {
 
       await comparePassword(result.password, authPayload.password)
 
+      const token = await createJwt({ userName: authPayload.userName });
+
       const loggedInPayload = <Details>{
         ...req.useragent,
-        userId: result._id
+        userId: result._id,
+        token
       }
       const loggedInResult = await LoggedIn.save(loggedInPayload)
 
-      const token = await createJwt({ userName: authPayload.userName });
 
       res.finish({ token, loggedIn: loggedInResult._id });
     } catch (error) {
@@ -50,7 +52,7 @@ export class AuthService {
 
   async loggedInDevices(req: Request, res: ExpressResponse, next) {
     try {
-      const result = await LoggedIn.findAll(req.query)
+      const result = await LoggedIn.findAll(<userIdDTO>req.query)
       res.finish(result)
     } catch (error) {
       next(error)
