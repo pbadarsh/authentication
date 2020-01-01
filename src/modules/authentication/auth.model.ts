@@ -1,12 +1,27 @@
 import { createSchema, Type, typedModel, ExtractProps } from "ts-mongoose";
 
-const collection = "auth-users";
-
+const authCollection = "auth-users";
+const loggedInCollection = "logged-in-devices"
 const authSchema = createSchema({
   userName: Type.string({ required: true }),
   password: Type.string({ required: true })
 });
 
-export const authModel = typedModel(collection, authSchema);
+const loggedInDeviceSchema = createSchema({
+  userId: Type.objectId({ required: true }),
+
+  isMobile: Type.boolean(),
+  isDesktop: Type.boolean(),
+  browser: Type.string(),
+  version: Type.string(),
+  os: Type.string(),
+  platform: Type.string(),
+  source: Type.string()
+
+}, { timestamps: true });
+
+export const authModel = typedModel(authCollection, authSchema);
+export const loggedInModel = typedModel(loggedInCollection, loggedInDeviceSchema);
 
 export type AuthProps = ExtractProps<typeof authSchema>;
+export type LoggedInProps = ExtractProps<typeof loggedInDeviceSchema>;

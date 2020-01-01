@@ -1,8 +1,8 @@
-import { authModel } from "./auth.model";
+import { authModel, AuthProps } from "./auth.model";
 
 export class AuthRepository {
-    async find(auth) {
-        return await authModel.findOne(auth);
+    async find({ userName }): Promise<AuthProps> {
+        return await authModel.findOne({ userName });
     }
     async save(auth) {
         return await new authModel(auth).save();

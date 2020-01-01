@@ -1,10 +1,11 @@
-import { ExpressResponse } from "express-methods";
-import { authModel } from "./auth.model";
-import { hashPassword, createJwt, validateJwt } from "../../common/common.util";
+import { ExpressResponse, ExpressError } from "express-methods";
+import { authModel, loggedInModel } from "./auth.model";
+import { hashPassword, createJwt, validateJwt, comparePassword } from "../../common/common.util";
 import { AuthDTO } from "./auth.dto";
 import { Request } from "express";
 import { BadRequest } from "http-errors";
 import { AuthRepository } from "./auth.repository";
+import { Details } from 'express-useragent'
 
 const Auth = new AuthRepository()
 export class AuthService {
@@ -15,8 +16,17 @@ export class AuthService {
       const result = await Auth.find(authPayload)
 
       if (!result) {
-        throw new BadRequest();
+        throw new ExpressError("User not found!", 400)
       }
+
+      await comparePassword(result.password, authPayload.password)
+
+      const loggedInPayload = {
+        ...req.useragent,
+        userId: result._id
+      }
+
+      const logged = await new loggedInModel(loggedInPayload).save()
 
       const token = await createJwt({ userName: authPayload.userName });
 

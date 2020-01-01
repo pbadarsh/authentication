@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken";
 const { SALT_ROUNDS, PRIVATE_KEY, ALGORITHM } = process.env;
 
 export const hashPassword = async (password: string) => {
-  return await hash(password, SALT_ROUNDS);
+  return await hash(password, +SALT_ROUNDS);
 };
 
 export const comparePassword = async (

@@ -1,7 +1,6 @@
 import { ExpressResponse, expressErrorHandler } from "express-methods";
 import { NotFound } from "http-errors";
 import { authRouter } from "./modules/authentication/auth.route";
-
 export const appRoutes = app => {
   app.get("/", (req, res: ExpressResponse, next) => {
     res.finish({}, "Authentication Server!");
