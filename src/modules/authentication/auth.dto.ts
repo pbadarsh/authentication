@@ -9,3 +9,9 @@ export class AuthDTO {
   @IsString()
   password: string;
 }
+
+export class userIdDTO {
+  @IsString()
+  @IsDefined()
+  userId: string
+}
