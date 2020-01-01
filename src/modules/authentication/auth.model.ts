@@ -1,10 +1,16 @@
 import { createSchema, Type, typedModel, ExtractProps } from "ts-mongoose";
 
+export enum Roles {
+  USER = 'user',
+  ADMIN = 'admin'
+}
+
 const authCollection = "auth-users";
 const loggedInCollection = "logged-in-devices"
 const authSchema = createSchema({
   userName: Type.string({ required: true }),
-  password: Type.string({ required: true })
+  password: Type.string({ required: true }),
+  role: Type.string({ default: Roles.USER })
 });
 
 const loggedInDeviceSchema = createSchema({

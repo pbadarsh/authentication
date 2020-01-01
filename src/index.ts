@@ -14,26 +14,32 @@ import morgan from "morgan";
 import { connect } from "mongoose";
 import { json } from 'body-parser'
 import helmet from 'helmet'
+import { client } from "./common/redis.util";
 
-connect(MONGODB_URL, {
-  useUnifiedTopology: true,
-  useNewUrlParser: true,
-  useFindAndModify: true
-})
-  .then(() => {
-    console.log("Mongodb connected");
+client.on("ready", () => {
+  console.log('Redis Connected')
 
-    app.listen(PORT, () => log("Server up on : ", PORT));
-
-    app.use(attachFinishMethod);
-    
-    app.use(helmet())
-    app.use(json())
-    app.use(useragent.express())
-    app.use(morgan("combined"));
-
-    appRoutes(app);
-
-    app.use(expressErrorHandler);
+  connect(MONGODB_URL, {
+    useUnifiedTopology: true,
+    useNewUrlParser: true,
+    useFindAndModify: true
   })
-  .catch(log);
+    .then(() => {
+      console.log("Mongodb connected");
+
+      app.listen(PORT, () => log("Server up on : ", PORT));
+
+      app.use(attachFinishMethod);
+
+      app.use(helmet())
+      app.use(json())
+      app.use(useragent.express())
+      app.use(morgan("combined"));
+
+      appRoutes(app);
+
+      app.use(expressErrorHandler);
+    })
+    .catch(log);
+
+})

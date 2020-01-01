@@ -1,4 +1,4 @@
-import { IsDefined, IsString } from "class-validator";
+import { IsDefined, IsString, IsOptional } from "class-validator";
 
 export class AuthDTO {
   @IsDefined()
@@ -10,8 +10,8 @@ export class AuthDTO {
   password: string;
 }
 
-export class userIdDTO {
+export class userDTO {
   @IsString()
-  @IsDefined()
-  userId: string
+  @IsOptional()
+  userId?: string
 }

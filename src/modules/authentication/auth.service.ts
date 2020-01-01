@@ -1,14 +1,16 @@
+import { isAdmin } from './../../common/common.util';
 import { ExpressResponse, ExpressError } from "express-methods";
 import { authModel, loggedInModel } from "./auth.model";
 import { hashPassword, createJwt, validateJwt, comparePassword } from "../../common/common.util";
-import { AuthDTO, userIdDTO } from "./auth.dto";
+import { AuthDTO, userDTO } from "./auth.dto";
 import { Request } from "express";
 import { BadRequest } from "http-errors";
-import { AuthRepository, LoggedInRepository } from "./auth.repository";
+import { AuthRepository, LoggedInRepository, LogoutRepository } from "./auth.repository";
 import { Details } from 'express-useragent'
 
 const Auth = new AuthRepository()
 const LoggedIn = new LoggedInRepository()
+const LogOut = new LogoutRepository()
 export class AuthService {
   async login(req: Request, res: ExpressResponse, next) {
     try {
@@ -22,7 +24,7 @@ export class AuthService {
 
       await comparePassword(result.password, authPayload.password)
 
-      const token = await createJwt({ userName: authPayload.userName });
+      const token = await createJwt({ userName: authPayload.userName, userId: result._id });
 
       const loggedInPayload = <Details>{
         ...req.useragent,
@@ -52,8 +54,24 @@ export class AuthService {
 
   async loggedInDevices(req: Request, res: ExpressResponse, next) {
     try {
-      const result = await LoggedIn.findAll(<userIdDTO>req.query)
+      const admin = await isAdmin(req.query)
+      let result = null
+
+      if (!admin) {
+        result = await LoggedIn.findAll(req.query)
+      } else {
+        result = await LoggedIn.findAll({})
+      }
+
       res.finish(result)
+    } catch (error) {
+      next(error)
+    }
+  }
+  async logout(req: Request, res: ExpressResponse, next) {
+    try {
+      await LogOut.add(req.headers.token)
+      res.finish({})
     } catch (error) {
       next(error)
     }
