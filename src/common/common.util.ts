@@ -4,6 +4,7 @@ import jwt from "jsonwebtoken";
 import { AuthRepository } from "../modules/authentication/auth.repository";
 import { Roles } from "../modules/authentication/auth.model";
 
+
 const { SALT_ROUNDS, PRIVATE_KEY, ALGORITHM, EXPIRES_IN } = process.env;
 
 const Auth = new AuthRepository()
