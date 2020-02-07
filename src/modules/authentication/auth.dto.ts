@@ -7,12 +7,12 @@ export class AuthDTO {
 
   @IsDefined()
   @IsString()
-  password: string
+  password: string;
 
-  mobileNumber?: string
+  mobileNumber?: string;
 
   @IsEmail()
-  emailAddress?: string
+  emailAddress?: string;
 }
 
 export class userDTO {

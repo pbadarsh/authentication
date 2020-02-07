@@ -5,19 +5,19 @@ import { ExpressResponse, ExpressError } from "express-methods";
 import { validateJwt, isAdmin } from "../../common/common.util";
 import { LogoutRepository, AuthRepository } from "./auth.repository";
 
-const LogOut = new LogoutRepository()
-const Auth = new AuthRepository()
+const LogOut = new LogoutRepository();
+const Auth = new AuthRepository();
 
 export const authMiddleware = async (req, res: ExpressResponse, next) => {
   try {
     const { token } = req.headers;
-    const result = await LogOut.get(token)
+    const result = await LogOut.get(token);
 
     if (result) {
       return next({
         statusCode: 401,
         message: `User has logged out`
-      })
+      });
     }
 
     // req = { ...req,... await validateJwt(token) };
@@ -27,16 +27,15 @@ export const authMiddleware = async (req, res: ExpressResponse, next) => {
   }
 };
 
-
 export const isAdminMiddleware = async (req, res: ExpressResponse, next) => {
   try {
-    const admin = await isAdmin(req.query)
+    const admin = await isAdmin(req.query);
 
     if (!admin) {
-      throw new Unauthorized()
+      throw new Unauthorized();
     }
     next();
   } catch (error) {
-    next(error)
+    next(error);
   }
 };

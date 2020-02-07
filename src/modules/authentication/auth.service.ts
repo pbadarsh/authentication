@@ -1,4 +1,4 @@
-import { SMSService } from './../message/message.service';
+import { SMSService } from "./../message/message.service";
 import { isAdmin } from "./../../common/common.util";
 import { ExpressResponse, ExpressError } from "express-methods";
 import { authModel, loggedInModel } from "./auth.model";
@@ -17,12 +17,11 @@ import {
   LogoutRepository
 } from "./auth.repository";
 import { Details } from "express-useragent";
-import { EmailService } from "../mailer/mailer.service"
+import { EmailService } from "../mailer/mailer.service";
 const Auth = new AuthRepository();
 const LoggedIn = new LoggedInRepository();
 const LogOut = new LogoutRepository();
 export class AuthService {
-
   async login(req: Request, res: ExpressResponse, next) {
     try {
       const authPayload: AuthDTO = req.body;
@@ -61,10 +60,17 @@ export class AuthService {
 
       await Auth.save(auth);
       if (auth.mobileNumber) {
-        await messageService.sendSMS({ message: "You have been registered", mobileNumber: auth.mobileNumber })
+        await messageService.sendSMS({
+          message: "You have been registered",
+          mobileNumber: auth.mobileNumber
+        });
       }
       if (auth.emailAddress) {
-        await emailService.sendEmail({ message: "You have been registered", subject: "Registration", to: auth.emailAddress })
+        await emailService.sendEmail({
+          message: "You have been registered",
+          subject: "Registration",
+          to: auth.emailAddress
+        });
       }
       res.finish({}, "User Registered!");
     } catch (error) {

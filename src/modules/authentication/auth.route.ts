@@ -11,9 +11,8 @@ authRouter.post("/login", login);
 
 authRouter.post("/register", register);
 
-authRouter.get("/loggedInDevices", authMiddleware, loggedInDevices)
+authRouter.get("/loggedInDevices", authMiddleware, loggedInDevices);
 
-authRouter.post("/logout", authMiddleware, logout)
-
+authRouter.post("/logout", authMiddleware, logout);
 
 // authRouter.post("/forgetPassword", login)
