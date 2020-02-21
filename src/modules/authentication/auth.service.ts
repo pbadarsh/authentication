@@ -21,6 +21,8 @@ import { EmailService } from "../mailer/mailer.service";
 const Auth = new AuthRepository();
 const LoggedIn = new LoggedInRepository();
 const LogOut = new LogoutRepository();
+const emailService = new EmailService();
+const messageService = new SMSService();
 export class AuthService {
   async login(req: Request, res: ExpressResponse, next) {
     try {
@@ -52,8 +54,6 @@ export class AuthService {
     }
   }
   async register(req: Request, res: ExpressResponse, next) {
-    let emailService = new EmailService();
-    let messageService = new SMSService();
     try {
       const auth: AuthDTO = req.body;
       auth.password = await hashPassword(auth.password);
@@ -82,7 +82,6 @@ export class AuthService {
     try {
       const admin = await isAdmin(req.query);
       let result = null;
-
       if (!admin) {
         result = await LoggedIn.findAll(req.query);
       } else {
